@@ -8,7 +8,7 @@ class SliderImage extends Model
 {
     protected $fillable = [
         'image',
-        'text',
+        'title',
         'description',
         'status'
     ];

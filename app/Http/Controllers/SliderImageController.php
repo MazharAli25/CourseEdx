@@ -10,8 +10,42 @@ class SliderImageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->ajax()) {
+            $sliderImages = SliderImage::select('id', 'image', 'title', 'description', 'status');
+
+            return datatables()->of($sliderImages)
+                ->addIndexColumn()
+                ->editColumn('title', function ($sliderImage) {
+                    return $sliderImage->title ?? 'N/A';
+                })
+                ->editColumn('image', function ($sliderImage) {
+                    return '<img src="'.asset($sliderImage->image).'" alt="Slider Image" width="100" height="50"/>';
+                })
+                ->editColumn('status', function ($sliderImage) {
+                    return '
+                        <select class="form-control status-dropdown" data-id="'.$sliderImage->id.'"
+                            data-id="'.$sliderImage->id.'"
+                            data-current="'.$sliderImage->status.'">
+                            <option value="active" '.($sliderImage->status == 'active' ? 'selected' : '').'>Active</option>
+                            <option value="inactive" '.($sliderImage->status == 'inactive' ? 'selected' : '').'>Inactive</option>
+                        </select>
+                    ';
+                })
+                ->addColumn('actions', function ($sliderImage) {
+                    $editUrl = route('slider-images.edit', $sliderImage->id);
+                    $deleteUrl = route('slider-images.destroy', $sliderImage->id);
+
+                    return '<a href="'.$editUrl.'" class="btn btn-sm btn-primary">Edit</a>
+                            <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="'.$sliderImage->id.'">
+                                Delete
+                            </button>';
+                })
+                ->rawColumns(['image', 'status', 'actions'])
+                ->make(true);
+        }
+
         return view('SuperAdmin.SystemSettings.SliderImages.index');
     }
 
@@ -30,12 +64,12 @@ class SliderImageController extends Controller
     {
         $validated = $request->validate([
             'image' => 'required|image|max:2048',
-            'title' => 'nullable|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
         ]);
 
         // Handle file upload
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             $sliderImage = $request->file('image');
             $imageName = time().'_'.$sliderImage->getClientOriginalName();
             $sliderImage->move(public_path('uploads/slider/'), $imageName);
@@ -80,6 +114,17 @@ class SliderImageController extends Controller
      */
     public function destroy(SliderImage $sliderImage)
     {
-        //
+        $sliderImage->delete();
+
+        return response()->json(['success' => true, 'message' => 'Slider image deleted successfully.']);
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $sliderImage = SliderImage::findOrFail($id);
+        $sliderImage->status = $request->input('status');
+        $sliderImage->save();
+
+        return response()->json(['success' => true]);
     }
 }

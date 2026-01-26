@@ -154,7 +154,7 @@ return [
 
     'layout_topnav' => null,
     'layout_boxed' => null,
-    'layout_fixed_sidebar' => null,
+    'layout_fixed_sidebar' => true,
     'layout_fixed_navbar' => null,
     'layout_fixed_footer' => null,
     'layout_dark_mode' => null,
@@ -351,7 +351,12 @@ return [
                     'text'=> 'Slider Images',
                     'route' => 'slider-images.index',
                     'icon' => 'fas fa-fw fa-images',
-                ]
+                ],
+                [
+                    'text'=> 'Social Links',
+                    'route' => 'social-links.index',
+                    'icon' => 'fas fa-fw fa-globe',
+                ],
             ]
         ],
         // [

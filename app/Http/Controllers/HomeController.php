@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SliderImage;
 use App\Models\SystemSetting;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -13,6 +13,12 @@ class HomeController extends Controller
     public function index()
     {
         $systemSetting = SystemSetting::first();
-        return view('welcome', compact('systemSetting'));
+
+        $sliders = SliderImage::where('status', 'active')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('welcome', compact('systemSetting', 'sliders'));
     }
 }
