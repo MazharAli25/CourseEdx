@@ -34,11 +34,11 @@ class SliderImageController extends Controller
                     ';
                 })
                 ->addColumn('actions', function ($sliderImage) {
-                    $editUrl = route('slider-images.edit', $sliderImage->id);
-                    $deleteUrl = route('slider-images.destroy', $sliderImage->id);
+                    $editUrl = route('slider-images.edit', encrypt($sliderImage->id));
+                    $deleteUrl = route('slider-images.destroy', encrypt($sliderImage->id));
 
                     return '<a href="'.$editUrl.'" class="btn btn-sm btn-primary">Edit</a>
-                            <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="'.$sliderImage->id.'">
+                            <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="'.encrypt($sliderImage->id).'">
                                 Delete
                             </button>';
                 })
@@ -98,7 +98,7 @@ class SliderImageController extends Controller
      */
     public function edit(SliderImage $sliderImage)
     {
-        //
+        return view('SuperAdmin.SystemSettings.SliderImages.edit', compact('sliderImage'));
     }
 
     /**
@@ -106,7 +106,30 @@ class SliderImageController extends Controller
      */
     public function update(Request $request, SliderImage $sliderImage)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'string|nullable',
+            'description' => 'string|nullable',
+            'image' => 'image|nullable|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $imageName = time().'_'.$file->getClientOriginalName();
+            $file->move(public_path('uploads/slider/'), $imageName);
+
+            $validated['image'] = 'uploads/slider/'.$imageName;
+        } else {
+            // keep the old image
+            $validated['image'] = $sliderImage->image;
+        }
+
+        $sliderImage->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'image' => $validated['image'] ?? $sliderImage->image,
+        ]);
+
+        return redirect()->route('slider-images.index')->with('success', 'Slider image updated successfully.');
     }
 
     /**

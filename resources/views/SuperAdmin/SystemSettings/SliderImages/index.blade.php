@@ -13,7 +13,7 @@
             <h5 class="mb-0">Slider List</h5>
 
             <div class="ml-auto">
-                <a href="{{ route('slider-images.create') }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('slider-images.create') }}" class="btn btn-primary">
                     Create
                 </a>
             </div>

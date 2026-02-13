@@ -1,0 +1,6 @@
+add all institutes list in hte new addmission form,
+
+Students List ==> Reg Student List
+
+
+Assign Diploma ==> Show only Diploma Name and Session List 

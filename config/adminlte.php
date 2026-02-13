@@ -138,7 +138,7 @@ return [
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => false,
     'usermenu_desc' => false,
-    'usermenu_profile_url' => false,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -257,7 +257,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => '/',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -310,55 +310,83 @@ return [
             'topnav_right' => true,
         ],
 
-        // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
             'text' => 'search',
         ],
+        // Admin Sidebar items:
         [
-            'text' => 'blog',
-            'url' => 'admin/blog',
-            'can' => 'manage-blog',
+            'text' => 'Management',
+            'icon' => 'fas fa-fw fa-tools',
+            'can' => 'super-admin',
+            'submenu' => [
+                [
+                    'text' => 'Categories',
+                    'icon' => 'fas fa-fw fa-layer-group',
+                    'url' => 'super-admin/category/',
+                ],
+                [
+                    'text' => 'Sub Categories',
+                    'icon' => 'fas fa-fw fa-layer-group',
+                    'url' => 'super-admin/sub-category/',
+                ],
+            ],
         ],
-        [
-            'text' => 'Home',
-            'url' => '/',
-            'icon' => 'fas fa-fw fa-home',
-        ],
-        // [
-        //     'text' => 'pages',
-        //     'url' => 'admin/pages',
-        //     'icon' => 'far fa-fw fa-file',
-        //     'label' => 4,
-        //     'label_color' => 'success',
-        // ],
-        // [
-        //     'text' => 'profile',
-        //     'url' => 'admin/settings',
-        //     'icon' => 'fas fa-fw fa-user',
-        // ],
         [
             'text' => 'System Setting List',
             'icon' => 'fas fa-fw fa-cogs',
-            'submenu'=>
-            [
+            'submenu' => [
                 [
-                    'text'=> 'Genenral Settings',
+                    'text' => 'Genenral Settings',
                     'url' => 'super-admin/system-settings',
                     'icon' => 'fas fa-fw fa-cog',
                 ],
                 [
-                    'text'=> 'Slider Images',
+                    'text' => 'Slider Images',
                     'route' => 'slider-images.index',
                     'icon' => 'fas fa-fw fa-images',
                 ],
                 [
-                    'text'=> 'Social Links',
+                    'text' => 'Social Links',
                     'route' => 'social-links.index',
                     'icon' => 'fas fa-fw fa-globe',
                 ],
-            ]
+                [
+                    'text' => 'Privacy Policy / T&C',
+                    'route' => 'privacy-policy.index',
+                    'icon' => 'fas fa-file-contract',
+                ],
+            ],
+            'can' => 'super-admin',
         ],
+        [
+            'text' => 'Courses Approvals List',
+            'route' => 'super.course-requests',
+            'icon' => 'fas fa-clipboard-check',
+            'can' => 'super-admin',
+        ],
+        [
+            'text' => 'Users Management',
+            'route' => 'super.registeredUsers',
+            'icon' => 'fas fa-fw fa-users',
+            'can' => 'super-admin',
+        ],
+
+        // Teacher Siderbar
+        [
+            'text' => 'My Courses',
+            'route' => 'course.index',
+            'icon' => 'fas fa-fw fa-book',
+            'can' => 'teacher',
+        ],
+        [
+            'text' => 'Enrollments List',
+            'route' => 'courses.enrollments',
+            'icon' => 'fas fa-user-graduate',
+            'can' => 'teacher',
+        ]
+
+        // Student Siderbar
         // [
         //     'text' => 'change_password',
         //     'url' => 'admin/settings',
@@ -476,7 +504,7 @@ return [
             ],
         ],
         'Select2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',

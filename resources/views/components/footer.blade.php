@@ -36,10 +36,13 @@
         <div>
             <h4 class="font-semibold text-white mb-4">Follow Us</h4>
             <div class="flex gap-4 text-lg">
-                <i class="fa-brands fa-facebook cursor-pointer"></i>
-                <i class="fa-brands fa-twitter cursor-pointer"></i>
-                <i class="fa-brands fa-linkedin cursor-pointer"></i>
-                <i class="fa-brands fa-instagram cursor-pointer"></i>
+            @isset($socialLinks)
+                @foreach ($socialLinks as $socialLink)
+                    <a href="{{ $socialLink->url }}" target="_blank"><i class="{{ $socialLink->icon_class }}"></i></a>
+                    
+                @endforeach
+                
+            @endisset
             </div>
         </div>
     </div>

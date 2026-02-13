@@ -30,12 +30,11 @@ class SocialLinkController extends Controller
                     ';
                 })
                 ->addColumn('actions', function ($row) {
-                    $editUrl = route('social-links.edit', $row->id);
-                    $deleteUrl = route('social-links.destroy', $row->id);
+                    $editUrl = route('social-links.edit', encrypt($row->id));
 
                     return '
                          <a href="'.$editUrl.'" class="btn btn-sm btn-primary mr-1">Edit</a>
-                            <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="'.$row->id.'">
+                            <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="'.encrypt($row->id).'">
                                 Delete
                             </button>
                     ';
@@ -91,7 +90,7 @@ class SocialLinkController extends Controller
      */
     public function edit(SocialLink $socialLink)
     {
-        //
+        return view('SuperAdmin.SystemSettings.SocialLinks.edit', compact('socialLink'));
     }
 
     /**
@@ -99,7 +98,21 @@ class SocialLinkController extends Controller
      */
     public function update(Request $request, SocialLink $socialLink)
     {
-        //
+        $validated = $request->validate([
+            'platform' => 'required|string|max:255|unique:social_links,platform,'.$socialLink->id,
+            'url' => 'required|url|max:255',
+        ]);
+
+        $iconName = strtolower($validated['platform']);
+        $icon = 'fab fa-'.$iconName;
+
+        $socialLink->update([
+            'platform' => $validated['platform'],
+            'url' => $validated['url'],
+            'icon_class' => $icon,
+        ]);
+
+        return redirect()->route('social-links.index')->with('success', 'Social link updated successfully.');
     }
 
     /**

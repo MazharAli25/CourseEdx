@@ -1,0 +1,8 @@
+Step 1: Install Package
+composer require jeroennoten/laravel-adminlte
+Step 2: Publish Config & Assets
+php artisan adminlte:install
+step 3:
+@extends('adminlte::page')
+Step 4:
+Customize sidebar in config/adminlte.php

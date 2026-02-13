@@ -13,7 +13,7 @@
                 <h5 class="mb-0">Social Links List</h5>
 
                 <div class="ml-auto">
-                    <a href="{{ route('social-links.create') }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('social-links.create') }}" class="btn btn-primary">
                         Create
                     </a>
                 </div>
@@ -60,7 +60,8 @@
                         data: 'icon',
                         name: 'icon',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        className: 'text-center'
                     },
                     {
                         data: 'platform',
@@ -83,7 +84,7 @@
                         name: 'actions',
                         orderable: false,
                         searchable: false,
-                        className: 'dt-head-center dt-body-center'
+                        className: 'text-center'
                     },
                 ],
             });
